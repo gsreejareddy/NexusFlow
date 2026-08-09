@@ -1,6 +1,6 @@
 # "NexusFlow": Visual IoT Telemetry & Rule Engine
 
-A visual IoT telemetry and dynamic rule engine developed as part of my Advanced MERN Stack Engineering internship at Infotact Solutions. Built with React, React Flow, Node.js, Express, MongoDB, RxJS, and WebSockets.
+NexusFlow is a Visual IoT Telemetry & Rule Engine that enables real-time monitoring, visualization, and automated processing of IoT device data. It provides an intuitive dashboard for tracking telemetry, defining custom rules, and triggering actions based on real-time device conditions.
 
 Team Members
   -G Sreeja
