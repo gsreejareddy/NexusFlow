@@ -5,8 +5,11 @@ The project aims to provide a visual workflow-based approach for creating IoT pr
 
 Team Members
   -G Sreeja
+  
   -Shivarathri Sruthi
+  
   -Jahanvi Panchal
+  
   -Richa Rupareliya
 
 ## ✨ Features
