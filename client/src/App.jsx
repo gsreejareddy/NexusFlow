@@ -1,14 +1,10 @@
-import { useCallback } from "react";
+import { useEffect, useState } from "react";
 import {
   ReactFlow,
   MiniMap,
   Controls,
   Background,
-  addEdge,
-  useNodesState,
-  useEdgesState,
 } from "@xyflow/react";
-
 import "@xyflow/react/dist/style.css";
 
 const initialNodes = [
@@ -43,46 +39,90 @@ const initialEdges = [
 ];
 
 function App() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [status, setStatus] = useState("Checking backend...");
 
-  const onConnect = useCallback(
-    (connection) => {
-      setEdges((currentEdges) => addEdge(connection, currentEdges));
-    },
-    [setEdges]
-  );
+  useEffect(() => {
+    fetch("http://localhost:5000/api/health")
+      .then((response) => response.json())
+      .then((data) => {
+        setStatus(data.message);
+      })
+      .catch(() => {
+        setStatus("Backend not connected");
+      });
+  }, []);
+
+  // Send telemetry data to backend
+  const sendTelemetry = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/telemetry",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            deviceId: "device-001",
+            temperature: 28.5,
+            pressure: 101.2,
+            vibration: 0.35,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Telemetry data saved successfully!");
+        console.log(data);
+      } else {
+        alert("Failed to save telemetry data");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Backend connection failed");
+    }
+  };
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <div
-        style={{
-          padding: "15px 25px",
-          background: "#0f766e",
-          color: "white",
-          fontSize: "24px",
-          fontWeight: "bold",
-        }}
-      >
-        NexusFlow
-        <span
-          style={{
-            marginLeft: "15px",
-            fontSize: "14px",
-            fontWeight: "normal",
-          }}
-        >
-          Visual IoT Telemetry & Rule Engine
-        </span>
-      </div>
 
-      <div style={{ height: "calc(100vh - 65px)" }}>
+      {/* Header */}
+      <div
+  style={{
+    padding: "15px 25px",
+    background: "#0f766e",
+    color: "white",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  }}
+>
+  <div>
+    <h2 style={{ margin: 0 }}>NexusFlow</h2>
+    <p style={{ margin: "5px 0 0" }}>{status}</p>
+  </div>
+
+  <button
+    onClick={sendTelemetry}
+    style={{
+      padding: "10px 18px",
+      border: "none",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontWeight: "bold",
+    }}
+  >
+    Send Telemetry
+  </button>
+</div>
+
+      {/* React Flow */}
+      <div style={{ height: "calc(100vh - 90px)" }}>
         <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
+          nodes={initialNodes}
+          edges={initialEdges}
           fitView
         >
           <Controls />
@@ -90,6 +130,7 @@ function App() {
           <Background />
         </ReactFlow>
       </div>
+
     </div>
   );
 }
