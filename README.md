@@ -4,6 +4,7 @@ NexusFlow is a MERN-based IoT telemetry and rule-engine platform designed to col
 The project aims to provide a visual workflow-based approach for creating IoT processing rules, reducing the need for hardcoded device logic.
 
 Team Members
+
   -G Sreeja
   
   -Shivarathri Sruthi
