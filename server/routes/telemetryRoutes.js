@@ -20,4 +20,23 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.get("/", async (req, res) => {
+    try {
+        const telemetry = await Telemetry
+            .find()
+            .sort({ timestamp: -1 });
+
+        res.status(200).json({
+            status: "success",
+            count: telemetry.length,
+            data: telemetry
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: "error",
+            message: error.message
+        });
+    }
+});
+
 module.exports = router;
