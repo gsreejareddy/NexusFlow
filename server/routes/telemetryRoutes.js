@@ -40,13 +40,22 @@ router.get("/", async (req, res) => {
 });
 router.get("/filter", async (req, res) => {
     try {
+        const { deviceId } = req.query;
+
+        if (!deviceId) {
+            return res.status(400).json({
+                status: "error",
+                message: "deviceId is required"
+            });
+        }
+
         const telemetry = await Telemetry
-            .find({ deviceId: req.query.deviceId })
+            .find({ deviceId })
             .sort({ timestamp: -1 });
 
         res.status(200).json({
             status: "success",
-            deviceId: req.query.deviceId,
+            deviceId,
             count: telemetry.length,
             data: telemetry
         });
