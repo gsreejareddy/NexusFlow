@@ -26,6 +26,13 @@ Team Members
 - 🔐 Environment-based database configuration
 - 🧪 API testing using PowerShell/REST requests
 
+### Telemetry API Endpoints
+
+POST /api/telemetry
+GET /api/telemetry
+GET /api/telemetry/:deviceId
+GET /api/telemetry/filter?deviceId=device-003
+
 ### Planned Features
 
 - 🎨 Visual drag-and-drop workflow builder
